@@ -35,8 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     revealButton.addEventListener("click", () => {
         murdererDetails.innerHTML = `
-            <h3>범인은 알렉스 존슨 (첩보원)입니다</h3>
-            <p>알렉스 존슨은 긴급 회의 중 녹색 액체를 사용하여 선장을 살해했습니다.</p>
+            <h3>범인은 알렉스 존슨 (연구 조수)입니다</h3>
+            <p>알렉스 존슨은 녹색 액체를 사용하여 선장을 살해했습니다. 그의 동기는 연구 결과를 왜곡하고 자신의 명성을 얻기 위해서였습니다.</p>
         `;
     });
 });
