@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>우주 살인 미스터리</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>우주 살인 미스터리</h1>
+        
+        <div id="background">
+            <h2>게임 배경</h2>
+            <p>우주 탐사선 "파이오니어"호가 미지의 행성을 탐사하던 중, 선장인 제임스 콜이 자신의 방에서 시신으로 발견되었습니다. 선장의 죽음으로 탐사선은 대혼란에 빠졌고, 승무원들은 범인을 찾아내기 위해 조사에 착수했습니다. 모든 승무원은 선장과 가까운 인물들이며, 선장의 죽음과 관련된 비밀을 간직하고 있습니다. 과연 누가 선장을 죽였을까요?</p>
+        </div>
+
+        <div id="navigation">
+            <h2>캐릭터 선택</h2>
+            <ul>
+                <li><a href="characters/scientist.html">에밀리 클락 박사 (과학자)</a></li>
+                <li><a href="characters/firstOfficer.html">존 밀러 (부선장)</a></li>
+                <li><a href="characters/doctor.html">레이첼 김 박사 (의사)</a></li>
+                <li><a href="characters/engineer.html">마이클 리 (엔지니어)</a></li>
+                <li><a href="characters/securityOfficer.html">사라 박 (보안 책임자)</a></li>
+                <li><a href="characters/spy.html">알렉스 존슨 (첩보원)</a></li>
+            </ul>
+        </div>
+        
+        <div id="character-summary">
+            <h2>캐릭터 요약</h2>
+            <p><strong>에밀리 클락 박사 (과학자)</strong>: 논리적이고 분석적이며 여러 번의 우주 탐사 경험을 가진 최고의 우주 생화학 박사.</p>
+            <p><strong>존 밀러 (부선장)</strong>: 충성스럽고 책임감이 강하며 다년간 우주 탐사 경험이 있는 선장의 보좌관.</p>
+            <p><strong>레이첼 김 박사 (의사)</strong>: 친절하고 헌신적이며 지구에서 명망 있는 의사로 활동하던 중 우주 탐사선에 합류.</p>
+            <p><strong>마이클 리 (엔지니어)</strong>: 창의적이고 차분하며 다양한 기술적 문제를 해결해 온 경험 많은 우주선 엔지니어.</p>
+            <p><strong>사라 박 (보안 책임자)</strong>: 강하고 결단력이 있으며 지구에서 다년간의 보안 경험을 쌓은 후 우주 탐사선에 합류.</p>
+            <p><strong>알렉스 존슨 (첩보원)</strong>: 교활하고 은밀하며 다른 세력의 명령을 받아 탐사선에 잠입한 첩보원.</p>
+        </div>
+
+        <div id="clues-navigation">
+            <h2>조사 단서</h2>
+            <ul id="clue-list"></ul>
+        </div>
+        
+        <div id="reveal">
+            <button id="reveal-murderer">범인 공개</button>
+            <div id="murderer-details"></div>
+        </div>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>
