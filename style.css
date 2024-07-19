@@ -4,7 +4,7 @@ body {
     color: #fff;
     margin: 0;
     padding: 0;
-    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIHN0b3AtY29sb3I9IiMwMDAiIG9mZnNldD0iMCUiLz48c3RvcCBzdG9wLWNvbG9yPSIjMDAwIiBvZmZzZXQ9IjUwJSIvPjxzdG9wIHN0b3AtY29sb3I9IiMwMDAiIG9mZnNldD0iMTAwJSIvPjwvbGluZWFyR3JhZGllbnQ+PHBhdGggZmlsbD0idXJsKCNnKSIgZD0iTTAgMGgxMDB2MTAwaC0xMDB6Ii8+PGNpcmNsZSBjeD0iMjAlIiBjeT0iMjAlIiByPSI1IiBmaWxsPSIjZmYwIi8+PGNpcmNsZSBjeD0iNTAlIiBjeT0iNTAlIiByPSIxMCIgZmlsbD0iI2ZmYSIvPjxjaXJjbGUgY3g9IjgwJSIgY3k9IjgwJSIgcj0iMTUiIGZpbGw9IiNmZjAiLz48L2RlZnM+PC9zdmc+');
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiIHgxPSIwJSIgeTE9IjAlIHgyPSIxMDAlIiB5Mj0iMTAwJSI+PHN0b3Agc3RvcC1jb2xvcj0iIzAwMCIgb2Zmc2V0PSIwJSIvPjxzdG9wIHN0b3AtY29sb3I9IiMwMDAiIG9mZnNldD0iNTAlIi8+PHN0b3Agc3RvcC1jb2xvcj0iIzAwMCIgb2Zmc2V0PSIxMDAlIi8+PC9saW5lYXJHcmFkaWVudD48cGF0aCBmaWxsPSJ1cmwoI2cpIiBkPSJNIDAgMGggMTAwIHYgMTAwaiAtMTAweiIvPjxjaXJjbGUgY3g9IjIwJSIgY3k9IjIwJSIgcj0iNSIgZmlsbD0iI2ZmMCIvPjxjaXJjbGUgY3g9IjUwJSIgY3k9IjUwJSIgcj0iMTAiIGZpbGw9IiNmZmEiLz48Y2lyY2xlIGN4PSI4MCUiIGN5PSI4MCUiIHI9IjE1IiBmaWxsPSIjZmYwIi8+PC9kZWZzPjwvc3ZnPg==');
     background-size: cover;
 }
 
@@ -65,6 +65,21 @@ a:hover {
     justify-content: center;
 }
 
+.card.disabled {
+    background-color: #800;
+    color: #fff;
+    cursor: not-allowed;
+}
+
+.card.disabled a {
+    pointer-events: none;
+}
+
+.card.disabled span {
+    font-size: 2em;
+    color: red;
+}
+
 .card:hover {
     background-color: #444;
     transform: scale(1.05);
@@ -91,4 +106,18 @@ footer {
 
 footer p {
     margin: 0;
+}
+
+#reset-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #f00;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#reset-btn:hover {
+    background-color: #c00;
 }
