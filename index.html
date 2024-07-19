@@ -3,50 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>우주 살인 미스터리</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>우주 배경 살인 미스터리</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>우주 살인 미스터리</h1>
-        
-        <div id="background">
-            <h2>게임 배경</h2>
-            <p>우주 탐사선 "파이오니어"호가 미지의 행성을 탐사하던 중, 선장인 제임스 콜이 자신의 방에서 시신으로 발견되었습니다. 선장의 죽음으로 탐사선은 대혼란에 빠졌고, 승무원들은 범인을 찾아내기 위해 조사에 착수했습니다. 모든 승무원은 선장과 가까운 인물들이며, 선장의 죽음과 관련된 비밀을 간직하고 있습니다. 과연 누가 선장을 죽였을까요?</p>
-        </div>
-
-        <div id="navigation">
-            <h2>캐릭터 선택</h2>
+    <header>
+        <h1>우주 배경 살인 미스터리</h1>
+    </header>
+    <main>
+        <section id="overview">
+            <h2>게임 개요</h2>
+            <p>우주 탐사선 "파이오니어"호는 인류 역사상 가장 야심 찬 탐사 임무를 수행 중입니다. 목적지는 수십 광년 떨어진 미지의 행성, 에리단 IV. 하지만 목적지에 도착하기 며칠 전, 선장은 자신의 방에서 시신으로 발견됩니다. 선장의 죽음은 단순한 사고가 아닙니다. 탐사선의 내부는 점점 긴장감이 고조되며, 서로를 의심하는 분위기가 팽배해집니다. 그리고 모두가 탐내는 소중한 물건, "에리단 IV의 지도"가 사라집니다.</p>
+        </section>
+        <section id="rules">
+            <h2>주의사항</h2>
             <ul>
-                <li><a href="characters/scientist.html">에밀리 클락 박사 (과학자)</a></li>
-                <li><a href="characters/firstOfficer.html">존 밀러 (부선장)</a></li>
-                <li><a href="characters/doctor.html">레이첼 김 박사 (의사)</a></li>
-                <li><a href="characters/engineer.html">마이클 리 (엔지니어)</a></li>
-                <li><a href="characters/securityOfficer.html">사라 박 (보안 책임자)</a></li>
-                <li><a href="characters/assistant.html">알렉스 존슨 (연구 조수)</a></li>
+                <li>범인은 거짓말을 해도 됩니다.</li>
+                <li>그 외의 사람은 거짓말을 해서는 안 됩니다.</li>
+                <li>말하고 싶지 않은 경우 "노코멘트" 또는 "몰라" 등의 발언은 상관없습니다.</li>
+                <li>토론 중, 10분마다 "깨달은 것 1/2"이 공표됩니다.</li>
             </ul>
-        </div>
-        
-        <div id="character-summary">
-            <h2>캐릭터 요약</h2>
-            <p><strong>에밀리 클락 박사 (과학자)</strong>: 논리적이고 분석적이며 여러 번의 우주 탐사 경험을 가진 최고의 우주 생화학 박사.</p>
-            <p><strong>존 밀러 (부선장)</strong>: 충성스럽고 책임감이 강하며 다년간 우주 탐사 경험이 있는 선장의 보좌관.</p>
-            <p><strong>레이첼 김 박사 (의사)</strong>: 친절하고 헌신적이며 지구에서 명망 있는 의사로 활동하던 중 우주 탐사선에 합류.</p>
-            <p><strong>마이클 리 (엔지니어)</strong>: 창의적이고 차분하며 다양한 기술적 문제를 해결해 온 경험 많은 우주선 엔지니어.</p>
-            <p><strong>사라 박 (보안 책임자)</strong>: 강하고 결단력이 있으며 지구에서 다년간의 보안 경험을 쌓은 후 우주 탐사선에 합류.</p>
-            <p><strong>알렉스 존슨 (연구 조수)</strong>: 열정적이고 학구적이며 과학자의 조수로 탐사선에 합류.</p>
-        </div>
-
-        <div id="clues-navigation">
-            <h2>조사 단서</h2>
-            <ul id="clue-list"></ul>
-        </div>
-        
-        <div id="reveal">
-            <button id="reveal-murderer">범인 공개</button>
-            <div id="murderer-details"></div>
-        </div>
-    </div>
-    <script src="scripts.js"></script>
+        </section>
+        <section id="schedule">
+            <h2>게임진행 스케줄</h2>
+            <ul>
+                <li><strong>10분:</strong> 캐릭터 시트 확인</li>
+                <li><strong>5분:</strong> 캐릭터 소개 (공유사항만 자기소개)</li>
+                <li><strong>30분:</strong> 토론 (10분 후 "깨달은 것 1" 공표, 20분 후 "깨달은 것 2" 공표)</li>
+                <li><strong>10분:</strong> 범인 투표</li>
+                <li><strong>5분:</strong> 정답 맞추기</li>
+                <li><strong>5분:</strong> 엔딩</li>
+            </ul>
+        </section>
+        <section id="characters">
+            <h2>등장인물 소개</h2>
+            <ul>
+                <li><a href="characters/emily.html">에밀리 클락 박사 (과학자)</a></li>
+                <li><a href="characters/john.html">존 밀러 (부선장)</a></li>
+                <li><a href="characters/rachel.html">레이첼 김 박사 (의사, 스파이)</a></li>
+                <li><a href="characters/michael.html">마이클 리 (엔지니어)</a></li>
+                <li><a href="characters/sara.html">사라 박 (보안 책임자)</a></li>
+                <li><a href="characters/alex.html">알렉스 존슨 (연구 조수)</a></li>
+            </ul>
+        </section>
+        <section id="clues">
+            <h2>단서 카드</h2>
+            <div class="card-container">
+                <div class="card"><a href="clues/emily_clues.html">에밀리 클락 박사 단서</a></div>
+                <div class="card"><a href="clues/john_clues.html">존 밀러 단서</a></div>
+                <div class="card"><a href="clues/rachel_clues.html">레이첼 김 박사 단서</a></div>
+                <div class="card"><a href="clues/michael_clues.html">마이클 리 단서</a></div>
+                <div class="card"><a href="clues/sara_clues.html">사라 박 단서</a></div>
+                <div class="card"><a href="clues/alex_clues.html">알렉스 존슨 단서</a></div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>© 2024 우주 배경 살인 미스터리</p>
+    </footer>
 </body>
 </html>
