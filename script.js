@@ -13,9 +13,10 @@ document.addEventListener("DOMContentLoaded", function() {
     // Add click event listener to each card
     cards.forEach(card => {
         card.addEventListener("click", function(event) {
-            const cardId = card.getAttribute("data-card-id");
             if (!card.classList.contains("disabled")) {
+                const cardId = card.getAttribute("data-card-id");
                 localStorage.setItem(cardId, "clicked");
+                window.open(card.querySelector("a").href, "_blank");
                 setTimeout(() => disableCard(card), 100); // Add a slight delay to allow the link to open
             }
         });
