@@ -9,9 +9,9 @@ document.addEventListener("DOMContentLoaded", function() {
     accessForm.addEventListener("submit", function(event) {
         event.preventDefault();
         const enteredCode = accessCodeInput.value;
-        const correctAccessCode = localStorage.getItem("access-code");
+        const correctAccessCode = Object.keys(localStorage).filter(key => key.startsWith("code-")).map(key => JSON.parse(localStorage.getItem(key)).code);
 
-        if (enteredCode === correctAccessCode) {
+        if (correctAccessCode.includes(enteredCode)) {
             accessForm.style.display = "none";
             contentSection.style.display = "block";
         } else {
