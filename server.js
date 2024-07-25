@@ -5,7 +5,7 @@ const fetch = require('node-fetch');
 const app = express();
 const PORT = 3000;
 
-const GITHUB_TOKEN = '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'; // 여기에 Personal Access Token을 입력하세요.
+const GITHUB_TOKEN = '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'; // 여기에 Personal Access Token을 입력하세요.
 const FILE_PATH = './access_codes.json';
 
 app.use(bodyParser.json());
