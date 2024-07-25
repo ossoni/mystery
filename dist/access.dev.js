@@ -4,43 +4,24 @@ document.addEventListener("DOMContentLoaded", function () {
   var generateBtn = document.getElementById("generate-btn");
   var generatedCode = document.getElementById("generated-code");
   var codeTableBody = document.querySelector("#code-table tbody");
-  var resetMessage = document.getElementById("reset-message");
-  var githubToken = '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'; // 여기에 Personal Access Token을 입력하세요.
-
   generateBtn.addEventListener("click", function () {
     var code = generateAccessCode();
-    var gistData = {
-      description: "Access Code",
-      "public": false,
-      files: {
-        "access_codes.json": {
-          content: JSON.stringify({
-            code: code,
-            email: "",
-            users: 0
-          })
-        }
-      }
+    var codeData = {
+      code: code,
+      email: "",
+      users: 0
     };
-    fetch('https://api.github.com/gists', {
+    fetch('/create-code', {
       method: 'POST',
       headers: {
-        'Authorization': "token ".concat(githubToken),
-        'Accept': 'application/vnd.github.v3+json'
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(gistData)
+      body: JSON.stringify(codeData)
     }).then(function (response) {
       return response.json();
     }).then(function (data) {
-      var gistId = data.id;
-      localStorage.setItem("code-".concat(code), JSON.stringify({
-        code: code,
-        email: "",
-        users: 0,
-        gistId: gistId
-      }));
-      addCodeToTable(code, "", 0);
-      generatedCode.textContent = "\uC0DD\uC131\uB41C \uCF54\uB4DC: ".concat(code);
+      addCodeToTable(data.code, data.email, data.users);
+      generatedCode.textContent = "\uC0DD\uC131\uB41C \uCF54\uB4DC: ".concat(data.code);
       generatedCode.style.display = "block";
     })["catch"](function (error) {
       return console.error('Error:', error);
@@ -68,9 +49,17 @@ document.addEventListener("DOMContentLoaded", function () {
     emailInput.type = "email";
     emailInput.value = email;
     emailInput.addEventListener("change", function () {
-      var storedData = JSON.parse(localStorage.getItem("code-".concat(code)));
-      storedData.email = emailInput.value;
-      localStorage.setItem("code-".concat(code), JSON.stringify(storedData));
+      fetch("/update-code", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          code: code,
+          email: emailInput.value,
+          users: users
+        })
+      });
     });
     emailCell.appendChild(emailInput);
     row.appendChild(emailCell);
@@ -90,15 +79,9 @@ document.addEventListener("DOMContentLoaded", function () {
     deleteBtn.textContent = "삭제";
     deleteBtn.classList.add("delete-btn");
     deleteBtn.addEventListener("click", function () {
-      var storedData = JSON.parse(localStorage.getItem("code-".concat(code)));
-      fetch("https://api.github.com/gists/".concat(storedData.gistId), {
-        method: 'DELETE',
-        headers: {
-          'Authorization': "token ".concat(githubToken),
-          'Accept': 'application/vnd.github.v3+json'
-        }
+      fetch("/delete-code/".concat(code), {
+        method: 'DELETE'
       }).then(function () {
-        localStorage.removeItem("code-".concat(code));
         row.remove();
       })["catch"](function (error) {
         return console.error('Error:', error);
@@ -106,35 +89,17 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     deleteCell.appendChild(deleteBtn);
     row.appendChild(deleteCell);
-    var resetCell = document.createElement("td");
-    var resetBtn = document.createElement("button");
-    resetBtn.textContent = "초기화";
-    resetBtn.addEventListener("click", function () {
-      var storedData = JSON.parse(localStorage.getItem("code-".concat(code)));
-      storedData.users = 0;
-      localStorage.setItem("code-".concat(code), JSON.stringify(storedData));
-      usersCell.textContent = storedData.users;
-      resetMessage.style.display = "block";
-      codeTableBody.style.display = "none"; // Hide code table
-
-      localStorage.removeItem("enteredCode"); // 상태 초기화
-    });
-    resetCell.appendChild(resetBtn);
-    row.appendChild(resetCell);
     codeTableBody.appendChild(row);
-  } // Load existing codes from localStorage
+  } // Load existing codes from server
 
 
-  for (var i = 0; i < localStorage.length; i++) {
-    var key = localStorage.key(i);
-
-    if (key.startsWith("code-")) {
-      var _JSON$parse = JSON.parse(localStorage.getItem(key)),
-          code = _JSON$parse.code,
-          email = _JSON$parse.email,
-          users = _JSON$parse.users;
-
-      addCodeToTable(code, email, users);
-    }
-  }
+  fetch('/access-codes').then(function (response) {
+    return response.json();
+  }).then(function (data) {
+    data.forEach(function (codeData) {
+      return addCodeToTable(codeData.code, codeData.email, codeData.users);
+    });
+  })["catch"](function (error) {
+    return console.error('Error:', error);
+  });
 });
