@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const code = generateAccessCode();
         const codeData = { code: code, email: "", users: 0 };
 
-        fetch('/create-code', {
+        fetch('https://ossoni.github.io/mystery/create-code', {  // 서버의 올바른 주소로 수정
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function() {
         emailInput.type = "email";
         emailInput.value = email;
         emailInput.addEventListener("change", function() {
-            fetch(`/update-code`, {
+            fetch(`https://ossoni.github.io/mystery/update-code`, {  // 서버의 올바른 주소로 수정
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function() {
         deleteBtn.textContent = "삭제";
         deleteBtn.classList.add("delete-btn");
         deleteBtn.addEventListener("click", function() {
-            fetch(`/delete-code/${code}`, {
+            fetch(`https://ossoni.github.io/mystery/delete-code/${code}`, {  // 서버의 올바른 주소로 수정
                 method: 'DELETE'
             })
             .then(() => {
@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Load existing codes from server
-    fetch('/access-codes')
+    fetch('https://ossoni.github.io/mystery/access-codes')  // 서버의 올바른 주소로 수정
         .then(response => response.json())
         .then(data => {
             data.forEach(codeData => addCodeToTable(codeData.code, codeData.email, codeData.users));
