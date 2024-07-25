@@ -5,7 +5,6 @@ const fetch = require('node-fetch');
 const app = express();
 const PORT = 3000;
 
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const FILE_PATH = './access_codes.json';
 
 app.use(bodyParser.json());
@@ -36,10 +35,10 @@ app.post('/create-code', async (req, res) => {
     };
 
     try {
+        // Token 제거된 상태로 요청
         const response = await fetch('https://api.github.com/gists', {
             method: 'POST',
             headers: {
-                'Authorization': `token ${GITHUB_TOKEN}`,
                 'Accept': 'application/vnd.github.v3+json'
             },
             body: JSON.stringify(gistData)
@@ -67,10 +66,10 @@ app.delete('/delete-code/:code', async (req, res) => {
     const codeData = accessCodes.find(c => c.code === code);
 
     try {
+        // Token 제거된 상태로 요청
         await fetch(`https://api.github.com/gists/${codeData.gistId}`, {
             method: 'DELETE',
             headers: {
-                'Authorization': `token ${GITHUB_TOKEN}`,
                 'Accept': 'application/vnd.github.v3+json'
             }
         });
