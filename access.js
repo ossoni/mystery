@@ -3,13 +3,37 @@ document.addEventListener("DOMContentLoaded", function() {
     const generatedCode = document.getElementById("generated-code");
     const codeTableBody = document.querySelector("#code-table tbody");
     const resetMessage = document.getElementById("reset-message");
+    const githubToken = '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'; // 여기에 Personal Access Token을 입력하세요.
 
     generateBtn.addEventListener("click", function() {
         const code = generateAccessCode();
-        localStorage.setItem(`code-${code}`, JSON.stringify({ code: code, email: "", users: 0 }));
-        addCodeToTable(code, "", 0);
-        generatedCode.textContent = `생성된 코드: ${code}`;
-        generatedCode.style.display = "block";
+        const gistData = {
+            description: "Access Code",
+            public: false,
+            files: {
+                "access_codes.json": {
+                    content: JSON.stringify({ code: code, email: "", users: 0 })
+                }
+            }
+        };
+
+        fetch('https://api.github.com/gists', {
+            method: 'POST',
+            headers: {
+                'Authorization': `token ${githubToken}`,
+                'Accept': 'application/vnd.github.v3+json'
+            },
+            body: JSON.stringify(gistData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            const gistId = data.id;
+            localStorage.setItem(`code-${code}`, JSON.stringify({ code: code, email: "", users: 0, gistId: gistId }));
+            addCodeToTable(code, "", 0);
+            generatedCode.textContent = `생성된 코드: ${code}`;
+            generatedCode.style.display = "block";
+        })
+        .catch(error => console.error('Error:', error));
     });
 
     function generateAccessCode() {
@@ -58,8 +82,19 @@ document.addEventListener("DOMContentLoaded", function() {
         deleteBtn.textContent = "삭제";
         deleteBtn.classList.add("delete-btn");
         deleteBtn.addEventListener("click", function() {
-            localStorage.removeItem(`code-${code}`);
-            row.remove();
+            const storedData = JSON.parse(localStorage.getItem(`code-${code}`));
+            fetch(`https://api.github.com/gists/${storedData.gistId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `token ${githubToken}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            })
+            .then(() => {
+                localStorage.removeItem(`code-${code}`);
+                row.remove();
+            })
+            .catch(error => console.error('Error:', error));
         });
         deleteCell.appendChild(deleteBtn);
         row.appendChild(deleteCell);

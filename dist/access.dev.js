@@ -5,16 +5,46 @@ document.addEventListener("DOMContentLoaded", function () {
   var generatedCode = document.getElementById("generated-code");
   var codeTableBody = document.querySelector("#code-table tbody");
   var resetMessage = document.getElementById("reset-message");
+  var githubToken = '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'; // 여기에 Personal Access Token을 입력하세요.
+
   generateBtn.addEventListener("click", function () {
     var code = generateAccessCode();
-    localStorage.setItem("code-".concat(code), JSON.stringify({
-      code: code,
-      email: "",
-      users: 0
-    }));
-    addCodeToTable(code, "", 0);
-    generatedCode.textContent = "\uC0DD\uC131\uB41C \uCF54\uB4DC: ".concat(code);
-    generatedCode.style.display = "block";
+    var gistData = {
+      description: "Access Code",
+      "public": false,
+      files: {
+        "access_codes.json": {
+          content: JSON.stringify({
+            code: code,
+            email: "",
+            users: 0
+          })
+        }
+      }
+    };
+    fetch('https://api.github.com/gists', {
+      method: 'POST',
+      headers: {
+        'Authorization': "token ".concat(githubToken),
+        'Accept': 'application/vnd.github.v3+json'
+      },
+      body: JSON.stringify(gistData)
+    }).then(function (response) {
+      return response.json();
+    }).then(function (data) {
+      var gistId = data.id;
+      localStorage.setItem("code-".concat(code), JSON.stringify({
+        code: code,
+        email: "",
+        users: 0,
+        gistId: gistId
+      }));
+      addCodeToTable(code, "", 0);
+      generatedCode.textContent = "\uC0DD\uC131\uB41C \uCF54\uB4DC: ".concat(code);
+      generatedCode.style.display = "block";
+    })["catch"](function (error) {
+      return console.error('Error:', error);
+    });
   });
 
   function generateAccessCode() {
@@ -60,8 +90,19 @@ document.addEventListener("DOMContentLoaded", function () {
     deleteBtn.textContent = "삭제";
     deleteBtn.classList.add("delete-btn");
     deleteBtn.addEventListener("click", function () {
-      localStorage.removeItem("code-".concat(code));
-      row.remove();
+      var storedData = JSON.parse(localStorage.getItem("code-".concat(code)));
+      fetch("https://api.github.com/gists/".concat(storedData.gistId), {
+        method: 'DELETE',
+        headers: {
+          'Authorization': "token ".concat(githubToken),
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      }).then(function () {
+        localStorage.removeItem("code-".concat(code));
+        row.remove();
+      })["catch"](function (error) {
+        return console.error('Error:', error);
+      });
     });
     deleteCell.appendChild(deleteBtn);
     row.appendChild(deleteCell);
