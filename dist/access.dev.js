@@ -8,9 +8,10 @@ document.addEventListener("DOMContentLoaded", function () {
     var code = generateAccessCode();
     localStorage.setItem("code-".concat(code), JSON.stringify({
       code: code,
-      email: ""
+      email: "",
+      users: 0
     }));
-    addCodeToTable(code, "");
+    addCodeToTable(code, "", 0);
     generatedCode.textContent = "\uC0DD\uC131\uB41C \uCF54\uB4DC: ".concat(code);
     generatedCode.style.display = "block";
   });
@@ -26,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return code;
   }
 
-  function addCodeToTable(code, email) {
+  function addCodeToTable(code, email, users) {
     var row = document.createElement("tr");
     var codeCell = document.createElement("td");
     codeCell.textContent = code;
@@ -42,6 +43,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     emailCell.appendChild(emailInput);
     row.appendChild(emailCell);
+    var usersCell = document.createElement("td");
+    usersCell.textContent = users;
+    row.appendChild(usersCell);
     var editCell = document.createElement("td");
     var editBtn = document.createElement("button");
     editBtn.textContent = "수정";
@@ -70,9 +74,10 @@ document.addEventListener("DOMContentLoaded", function () {
     if (key.startsWith("code-")) {
       var _JSON$parse = JSON.parse(localStorage.getItem(key)),
           code = _JSON$parse.code,
-          email = _JSON$parse.email;
+          email = _JSON$parse.email,
+          users = _JSON$parse.users;
 
-      addCodeToTable(code, email);
+      addCodeToTable(code, email, users);
     }
   }
 });

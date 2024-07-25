@@ -5,8 +5,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     generateBtn.addEventListener("click", function() {
         const code = generateAccessCode();
-        localStorage.setItem(`code-${code}`, JSON.stringify({ code: code, email: "" }));
-        addCodeToTable(code, "");
+        localStorage.setItem(`code-${code}`, JSON.stringify({ code: code, email: "", users: 0 }));
+        addCodeToTable(code, "", 0);
         generatedCode.textContent = `생성된 코드: ${code}`;
         generatedCode.style.display = "block";
     });
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return code;
     }
 
-    function addCodeToTable(code, email) {
+    function addCodeToTable(code, email, users) {
         const row = document.createElement("tr");
 
         const codeCell = document.createElement("td");
@@ -38,6 +38,10 @@ document.addEventListener("DOMContentLoaded", function() {
         });
         emailCell.appendChild(emailInput);
         row.appendChild(emailCell);
+
+        const usersCell = document.createElement("td");
+        usersCell.textContent = users;
+        row.appendChild(usersCell);
 
         const editCell = document.createElement("td");
         const editBtn = document.createElement("button");
@@ -66,8 +70,8 @@ document.addEventListener("DOMContentLoaded", function() {
     for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         if (key.startsWith("code-")) {
-            const { code, email } = JSON.parse(localStorage.getItem(key));
-            addCodeToTable(code, email);
+            const { code, email, users } = JSON.parse(localStorage.getItem(key));
+            addCodeToTable(code, email, users);
         }
     }
 });

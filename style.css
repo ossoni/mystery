@@ -122,6 +122,10 @@ footer p {
     background-color: #c00;
 }
 
+/* 캐릭터 이미지 추가 */
+.characters ul {display: flex; margin: 0;padding: 0; list-style: none;}
+.characters ul li {padding: 0 5px;}
+.characters ul li strong {display: block; text-align: center;}
 
 /* 코드생성에 대한 css */
 /* Add these styles to style.css */
