@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
@@ -5,7 +7,7 @@ const fetch = require('node-fetch');
 const app = express();
 const PORT = 3000;
 
-const GITHUB_TOKEN = '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'; // 여기에 Personal Access Token을 입력하세요.
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const FILE_PATH = './access_codes.json';
 
 app.use(bodyParser.json());
