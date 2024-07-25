@@ -1,97 +1,87 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const generateBtn = document.getElementById("generate-btn");
-    const generatedCode = document.getElementById("generated-code");
-    const codeTableBody = document.querySelector("#code-table tbody");
+const express = require('express');
+const bodyParser = require('body-parser');
+const fs = require('fs');
+const fetch = require('node-fetch');
+const app = express();
+const PORT = 3000;
 
-    generateBtn.addEventListener("click", function() {
-        const code = generateAccessCode();
-        const codeData = { code: code, email: "", users: 0 };
+const GITHUB_TOKEN = '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'; // 여기에 Personal Access Token을 입력하세요.
+const FILE_PATH = './access_codes.json';
 
-        fetch('/create-code', {
+app.use(bodyParser.json());
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
+// Load access codes from file
+let accessCodes = [];
+if (fs.existsSync(FILE_PATH)) {
+    accessCodes = JSON.parse(fs.readFileSync(FILE_PATH));
+}
+
+// Endpoint to create access code
+app.post('/create-code', async (req, res) => {
+    const codeData = req.body;
+    const gistData = {
+        description: "Access Code",
+        public: false,
+        files: {
+            "access_codes.json": {
+                content: JSON.stringify(codeData)
+            }
+        }
+    };
+
+    try {
+        const response = await fetch('https://api.github.com/gists', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Accept': 'application/vnd.github.v3+json'
             },
-            body: JSON.stringify(codeData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            addCodeToTable(data.code, data.email, data.users);
-            generatedCode.textContent = `생성된 코드: ${data.code}`;
-            generatedCode.style.display = "block";
-        })
-        .catch(error => console.error('Error:', error));
-    });
-
-    function generateAccessCode() {
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        let code = '';
-        for (let i = 0; i < 8; i++) {
-            code += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return code;
+            body: JSON.stringify(gistData)
+        });
+        const data = await response.json();
+        codeData.gistId = data.id;
+        accessCodes.push(codeData);
+        fs.writeFileSync(FILE_PATH, JSON.stringify(accessCodes));
+        res.status(201).send(codeData);
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Internal Server Error');
     }
+});
 
-    function addCodeToTable(code, email, users) {
-        const row = document.createElement("tr");
+// Endpoint to get access codes
+app.get('/access-codes', (req, res) => {
+    res.json(accessCodes);
+});
 
-        const codeCell = document.createElement("td");
-        codeCell.textContent = code;
-        row.appendChild(codeCell);
+// Endpoint to delete access code
+app.delete('/delete-code/:code', async (req, res) => {
+    const code = req.params.code;
+    const codeData = accessCodes.find(c => c.code === code);
 
-        const emailCell = document.createElement("td");
-        const emailInput = document.createElement("input");
-        emailInput.type = "email";
-        emailInput.value = email;
-        emailInput.addEventListener("change", function() {
-            fetch(`/update-code`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ code: code, email: emailInput.value, users: users })
-            });
+    try {
+        await fetch(`https://api.github.com/gists/${codeData.gistId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Accept': 'application/vnd.github.v3+json'
+            }
         });
-        emailCell.appendChild(emailInput);
-        row.appendChild(emailCell);
 
-        const usersCell = document.createElement("td");
-        usersCell.textContent = users || 0;
-        row.appendChild(usersCell);
-
-        const editCell = document.createElement("td");
-        const editBtn = document.createElement("button");
-        editBtn.textContent = "수정";
-        editBtn.addEventListener("click", function() {
-            emailInput.focus();
-        });
-        editCell.appendChild(editBtn);
-        row.appendChild(editCell);
-
-        const deleteCell = document.createElement("td");
-        const deleteBtn = document.createElement("button");
-        deleteBtn.textContent = "삭제";
-        deleteBtn.classList.add("delete-btn");
-        deleteBtn.addEventListener("click", function() {
-            fetch(`/delete-code/${code}`, {
-                method: 'DELETE'
-            })
-            .then(() => {
-                row.remove();
-            })
-            .catch(error => console.error('Error:', error));
-        });
-        deleteCell.appendChild(deleteBtn);
-        row.appendChild(deleteCell);
-
-        codeTableBody.appendChild(row);
+        accessCodes = accessCodes.filter(c => c.code !== code);
+        fs.writeFileSync(FILE_PATH, JSON.stringify(accessCodes));
+        res.status(204).send();
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Internal Server Error');
     }
+});
 
-    // Load existing codes from server
-    fetch('/access-codes')
-        .then(response => response.json())
-        .then(data => {
-            data.forEach(codeData => addCodeToTable(codeData.code, codeData.email, codeData.users));
-        })
-        .catch(error => console.error('Error:', error));
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
