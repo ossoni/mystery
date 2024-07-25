@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
+const fetch = require('node-fetch');
 const app = express();
 const PORT = 3000;
 
@@ -8,6 +9,11 @@ const GITHUB_TOKEN = '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'; // 여기에 Pe
 const FILE_PATH = './access_codes.json';
 
 app.use(bodyParser.json());
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 // Load access codes from file
 let accessCodes = [];
@@ -38,6 +44,7 @@ app.post('/create-code', async (req, res) => {
             body: JSON.stringify(gistData)
         });
         const data = await response.json();
+        if (!data.id) throw new Error('Failed to create gist');
         codeData.gistId = data.id;
         accessCodes.push(codeData);
         fs.writeFileSync(FILE_PATH, JSON.stringify(accessCodes));

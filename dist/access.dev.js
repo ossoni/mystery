@@ -1,133 +1,110 @@
 "use strict";
 
-var express = require('express');
+document.addEventListener("DOMContentLoaded", function () {
+  var generateBtn = document.getElementById("generate-btn");
+  var generatedCode = document.getElementById("generated-code");
+  var codeTableBody = document.querySelector("#code-table tbody");
+  generateBtn.addEventListener("click", function () {
+    var code = generateAccessCode();
+    var codeData = {
+      code: code,
+      email: "",
+      users: 0
+    };
+    fetch('/create-code', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(codeData)
+    }).then(function (response) {
+      return response.text();
+    }) // 응답을 JSON 대신 텍스트로 먼저 파싱
+    .then(function (text) {
+      console.log('Response Text:', text); // 응답 텍스트를 콘솔에 출력
 
-var bodyParser = require('body-parser');
+      var data = JSON.parse(text); // 텍스트를 JSON으로 파싱
 
-var fs = require('fs');
+      addCodeToTable(data.code, data.email, data.users);
+      generatedCode.textContent = "\uC0DD\uC131\uB41C \uCF54\uB4DC: ".concat(data.code);
+      generatedCode.style.display = "block";
+    })["catch"](function (error) {
+      return console.error('Error:', error);
+    });
+  });
 
-var fetch = require('node-fetch');
+  function generateAccessCode() {
+    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    var code = '';
 
-var app = express();
-var PORT = 3000;
-var GITHUB_TOKEN = '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'; // 여기에 Personal Access Token을 입력하세요.
-
-var FILE_PATH = './access_codes.json';
-app.use(bodyParser.json());
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-}); // Load access codes from file
-
-var accessCodes = [];
-
-if (fs.existsSync(FILE_PATH)) {
-  accessCodes = JSON.parse(fs.readFileSync(FILE_PATH));
-} // Endpoint to create access code
-
-
-app.post('/create-code', function _callee(req, res) {
-  var codeData, gistData, response, data;
-  return regeneratorRuntime.async(function _callee$(_context) {
-    while (1) {
-      switch (_context.prev = _context.next) {
-        case 0:
-          codeData = req.body;
-          gistData = {
-            description: "Access Code",
-            "public": false,
-            files: {
-              "access_codes.json": {
-                content: JSON.stringify(codeData)
-              }
-            }
-          };
-          _context.prev = 2;
-          _context.next = 5;
-          return regeneratorRuntime.awrap(fetch('https://api.github.com/gists', {
-            method: 'POST',
-            headers: {
-              'Authorization': "token ".concat(GITHUB_TOKEN),
-              'Accept': 'application/vnd.github.v3+json'
-            },
-            body: JSON.stringify(gistData)
-          }));
-
-        case 5:
-          response = _context.sent;
-          _context.next = 8;
-          return regeneratorRuntime.awrap(response.json());
-
-        case 8:
-          data = _context.sent;
-          codeData.gistId = data.id;
-          accessCodes.push(codeData);
-          fs.writeFileSync(FILE_PATH, JSON.stringify(accessCodes));
-          res.status(201).send(codeData);
-          _context.next = 19;
-          break;
-
-        case 15:
-          _context.prev = 15;
-          _context.t0 = _context["catch"](2);
-          console.error('Error:', _context.t0);
-          res.status(500).send('Internal Server Error');
-
-        case 19:
-        case "end":
-          return _context.stop();
-      }
+    for (var i = 0; i < 8; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
     }
-  }, null, null, [[2, 15]]);
-}); // Endpoint to get access codes
 
-app.get('/access-codes', function (req, res) {
-  res.json(accessCodes);
-}); // Endpoint to delete access code
+    return code;
+  }
 
-app["delete"]('/delete-code/:code', function _callee2(req, res) {
-  var code, codeData;
-  return regeneratorRuntime.async(function _callee2$(_context2) {
-    while (1) {
-      switch (_context2.prev = _context2.next) {
-        case 0:
-          code = req.params.code;
-          codeData = accessCodes.find(function (c) {
-            return c.code === code;
-          });
-          _context2.prev = 2;
-          _context2.next = 5;
-          return regeneratorRuntime.awrap(fetch("https://api.github.com/gists/".concat(codeData.gistId), {
-            method: 'DELETE',
-            headers: {
-              'Authorization': "token ".concat(GITHUB_TOKEN),
-              'Accept': 'application/vnd.github.v3+json'
-            }
-          }));
+  function addCodeToTable(code, email, users) {
+    var row = document.createElement("tr");
+    var codeCell = document.createElement("td");
+    codeCell.textContent = code;
+    row.appendChild(codeCell);
+    var emailCell = document.createElement("td");
+    var emailInput = document.createElement("input");
+    emailInput.type = "email";
+    emailInput.value = email;
+    emailInput.addEventListener("change", function () {
+      fetch("/update-code", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          code: code,
+          email: emailInput.value,
+          users: users
+        })
+      });
+    });
+    emailCell.appendChild(emailInput);
+    row.appendChild(emailCell);
+    var usersCell = document.createElement("td");
+    usersCell.textContent = users || 0;
+    row.appendChild(usersCell);
+    var editCell = document.createElement("td");
+    var editBtn = document.createElement("button");
+    editBtn.textContent = "수정";
+    editBtn.addEventListener("click", function () {
+      emailInput.focus();
+    });
+    editCell.appendChild(editBtn);
+    row.appendChild(editCell);
+    var deleteCell = document.createElement("td");
+    var deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "삭제";
+    deleteBtn.classList.add("delete-btn");
+    deleteBtn.addEventListener("click", function () {
+      fetch("/delete-code/".concat(code), {
+        method: 'DELETE'
+      }).then(function () {
+        row.remove();
+      })["catch"](function (error) {
+        return console.error('Error:', error);
+      });
+    });
+    deleteCell.appendChild(deleteBtn);
+    row.appendChild(deleteCell);
+    codeTableBody.appendChild(row);
+  } // Load existing codes from server
 
-        case 5:
-          accessCodes = accessCodes.filter(function (c) {
-            return c.code !== code;
-          });
-          fs.writeFileSync(FILE_PATH, JSON.stringify(accessCodes));
-          res.status(204).send();
-          _context2.next = 14;
-          break;
 
-        case 10:
-          _context2.prev = 10;
-          _context2.t0 = _context2["catch"](2);
-          console.error('Error:', _context2.t0);
-          res.status(500).send('Internal Server Error');
-
-        case 14:
-        case "end":
-          return _context2.stop();
-      }
-    }
-  }, null, null, [[2, 10]]);
-});
-app.listen(PORT, function () {
-  console.log("Server running on port ".concat(PORT));
+  fetch('/access-codes').then(function (response) {
+    return response.json();
+  }).then(function (data) {
+    data.forEach(function (codeData) {
+      return addCodeToTable(codeData.code, codeData.email, codeData.users);
+    });
+  })["catch"](function (error) {
+    return console.error('Error:', error);
+  });
 });

@@ -6,12 +6,19 @@ var bodyParser = require('body-parser');
 
 var fs = require('fs');
 
+var fetch = require('node-fetch');
+
 var app = express();
 var PORT = 3000;
 var GITHUB_TOKEN = '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'; // 여기에 Personal Access Token을 입력하세요.
 
 var FILE_PATH = './access_codes.json';
-app.use(bodyParser.json()); // Load access codes from file
+app.use(bodyParser.json());
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+}); // Load access codes from file
 
 var accessCodes = [];
 
@@ -54,25 +61,34 @@ app.post('/create-code', function _callee(req, res) {
 
         case 8:
           data = _context.sent;
+
+          if (data.id) {
+            _context.next = 11;
+            break;
+          }
+
+          throw new Error('Failed to create gist');
+
+        case 11:
           codeData.gistId = data.id;
           accessCodes.push(codeData);
           fs.writeFileSync(FILE_PATH, JSON.stringify(accessCodes));
           res.status(201).send(codeData);
-          _context.next = 19;
+          _context.next = 21;
           break;
 
-        case 15:
-          _context.prev = 15;
+        case 17:
+          _context.prev = 17;
           _context.t0 = _context["catch"](2);
           console.error('Error:', _context.t0);
           res.status(500).send('Internal Server Error');
 
-        case 19:
+        case 21:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[2, 15]]);
+  }, null, null, [[2, 17]]);
 }); // Endpoint to get access codes
 
 app.get('/access-codes', function (req, res) {
