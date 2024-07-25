@@ -4,7 +4,7 @@ body {
     color: #fff;
     margin: 0;
     padding: 0;
-    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiIHgxPSIwJSIgeTE9IjAlIHgyPSIxMDAlIiB5Mj0iMTAwJSI+PHN0b3Agc3RvcC1jb2xvcj0iIzAwMCIgb2Zmc2V0PSIwJSIvPjxzdG9wIHN0b3AtY29sb3I9IiMwMDAiIG9mZnNldD0iNTAlIi8+PHN0b3Agc3RvcC1jb2xvcj0iIzAwMCIgb2Zmc2V0PSIxMDAlIi8+PC9saW5lYXJHcmFkaWVudD48cGF0aCBmaWxsPSJ1cmwoI2cpIiBkPSJNIDAgMGggMTAwIHYgMTAwaiAtMTAweiIvPjxjaXJjbGUgY3g9IjIwJSIgY3k9IjIwJSIgcj0iNSIgZmlsbD0iI2ZmMCIvPjxjaXJjbGUgY3g9IjUwJSIgY3k9IjUwJSIgcj0iMTAiIGZpbGw9IiNmZmEiLz48Y2lyY2xlIGN4PSI4MCUiIGN5PSI4MCUiIHI9IjE1IiBmaWxsPSIjZmYwIi8+PC9kZWZzPjwvc3ZnPg==');
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgZ3JhZGllZW50VVVJRD0idXNlclNwYWNlT25Vc2UiIHgxPSIwJSIgeTE9IjAlIHgyPSIxMDAlIiB5Mj0iMTAwJSI+PHN0b3Agc3RvcC1jb2xvcj0iIzAwMCIgb2Zmc2V0PSIwJSIvPjxzdG9wIHN0b3AtY29sb3I9IiMwMDAiIG9mZnNldD0iNTAlIi8+PHN0b3Agc3RvcC1jb2xvcj0iIzAwMCIgb2Zmc2V0PSIxMDAlIi8+PC9saW5lYXJHcmFkaWVudD48cGF0aCBmaWxsPSJ1cmwoI2cpIiBkPSJNIDAgMGggMTAwIHYgMTAwaiAtMTAweiIvPjxjaXJjbGUgY3g9IjIwJSIgY3k9IjIwJSIgcj0iNSIgZmlsbD0iI2ZmMCIvPjxjaXJjbGUgY3g9IjUwJSIgY3k9IjUwJSIgcj0iMTAiIGZpbGw9IiNmZmEiLz48Y2lyY2xlIGN4PSI4MCUiIGN5PSI4MCUiIHI9IjE1IiBmaWxsPSIjZmYwIi8+PC9kZWZzPjwvc3ZnPg==');
     background-size: cover;
 }
 
@@ -119,5 +119,52 @@ footer p {
 }
 
 #reset-btn:hover {
+    background-color: #c00;
+}
+
+
+/* 코드생성에 대한 css */
+/* Add these styles to style.css */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #fff;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+input[type="text"], input[type="email"] {
+    width: 100%;
+    padding: 8px;
+    margin: 4px 0;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 8px 12px;
+    background-color: #0f0;
+    border: none;
+    cursor: pointer;
+    color: #000;
+}
+
+button:hover {
+    background-color: #ff0;
+}
+
+button.delete-btn {
+    background-color: #f00;
+    color: #fff;
+}
+
+button.delete-btn:hover {
     background-color: #c00;
 }

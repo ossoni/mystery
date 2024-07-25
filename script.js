@@ -1,6 +1,23 @@
 document.addEventListener("DOMContentLoaded", function() {
     const cards = document.querySelectorAll(".card");
     const resetBtn = document.getElementById("reset-btn");
+    const accessForm = document.getElementById("access-form");
+    const accessCodeInput = document.getElementById("access-code");
+    const errorMessage = document.getElementById("error-message");
+    const contentSection = document.getElementById("content");
+
+    accessForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+        const enteredCode = accessCodeInput.value;
+        const correctAccessCode = localStorage.getItem("access-code");
+
+        if (enteredCode === correctAccessCode) {
+            accessForm.style.display = "none";
+            contentSection.style.display = "block";
+        } else {
+            errorMessage.style.display = "block";
+        }
+    });
 
     // Load the clicked state from localStorage
     cards.forEach(card => {

@@ -2,7 +2,23 @@
 
 document.addEventListener("DOMContentLoaded", function () {
   var cards = document.querySelectorAll(".card");
-  var resetBtn = document.getElementById("reset-btn"); // Load the clicked state from localStorage
+  var resetBtn = document.getElementById("reset-btn");
+  var accessForm = document.getElementById("access-form");
+  var accessCodeInput = document.getElementById("access-code");
+  var errorMessage = document.getElementById("error-message");
+  var contentSection = document.getElementById("content");
+  accessForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    var enteredCode = accessCodeInput.value;
+    var correctAccessCode = localStorage.getItem("access-code");
+
+    if (enteredCode === correctAccessCode) {
+      accessForm.style.display = "none";
+      contentSection.style.display = "block";
+    } else {
+      errorMessage.style.display = "block";
+    }
+  }); // Load the clicked state from localStorage
 
   cards.forEach(function (card) {
     var cardId = card.getAttribute("data-card-id");
@@ -14,10 +30,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   cards.forEach(function (card) {
     card.addEventListener("click", function (event) {
-      var cardId = card.getAttribute("data-card-id");
-
       if (!card.classList.contains("disabled")) {
+        var cardId = card.getAttribute("data-card-id");
         localStorage.setItem(cardId, "clicked");
+        window.open(card.querySelector("a").href, "_blank");
         setTimeout(function () {
           return disableCard(card);
         }, 100); // Add a slight delay to allow the link to open
