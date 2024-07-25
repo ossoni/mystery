@@ -19,13 +19,23 @@ document.addEventListener("DOMContentLoaded", function() {
     accessForm.addEventListener("submit", function(event) {
         event.preventDefault();
         const enteredCode = accessCodeInput.value;
+        const codeKey = `code-${enteredCode}`;
         const correctAccessCode = Object.keys(localStorage).filter(key => key.startsWith("code-")).map(key => JSON.parse(localStorage.getItem(key)).code);
 
         if (correctAccessCode.includes(enteredCode)) {
-            accessForm.style.display = "none";
-            contentSection.style.display = "block";
-            localStorage.setItem("enteredCode", enteredCode); // 상태 저장
+            const storedData = JSON.parse(localStorage.getItem(codeKey));
+            if (storedData.users < 7) {
+                storedData.users += 1;
+                localStorage.setItem(codeKey, JSON.stringify(storedData));
+                accessForm.style.display = "none";
+                contentSection.style.display = "block";
+                localStorage.setItem("enteredCode", enteredCode); // 상태 저장
+            } else {
+                errorMessage.textContent = "접속 인원이 초과되었습니다.";
+                errorMessage.style.display = "block";
+            }
         } else {
+            errorMessage.textContent = "잘못된 접근 코드입니다.";
             errorMessage.style.display = "block";
         }
     });

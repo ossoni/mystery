@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var generateBtn = document.getElementById("generate-btn");
   var generatedCode = document.getElementById("generated-code");
   var codeTableBody = document.querySelector("#code-table tbody");
+  var resetMessage = document.getElementById("reset-message");
   generateBtn.addEventListener("click", function () {
     var code = generateAccessCode();
     localStorage.setItem("code-".concat(code), JSON.stringify({
@@ -44,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
     emailCell.appendChild(emailInput);
     row.appendChild(emailCell);
     var usersCell = document.createElement("td");
-    usersCell.textContent = users;
+    usersCell.textContent = users || 0;
     row.appendChild(usersCell);
     var editCell = document.createElement("td");
     var editBtn = document.createElement("button");
@@ -64,6 +65,21 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     deleteCell.appendChild(deleteBtn);
     row.appendChild(deleteCell);
+    var resetCell = document.createElement("td");
+    var resetBtn = document.createElement("button");
+    resetBtn.textContent = "초기화";
+    resetBtn.addEventListener("click", function () {
+      var storedData = JSON.parse(localStorage.getItem("code-".concat(code)));
+      storedData.users = 0;
+      localStorage.setItem("code-".concat(code), JSON.stringify(storedData));
+      usersCell.textContent = storedData.users;
+      resetMessage.style.display = "block";
+      codeTableBody.style.display = "none"; // Hide code table
+
+      localStorage.removeItem("enteredCode"); // 상태 초기화
+    });
+    resetCell.appendChild(resetBtn);
+    row.appendChild(resetCell);
     codeTableBody.appendChild(row);
   } // Load existing codes from localStorage
 
